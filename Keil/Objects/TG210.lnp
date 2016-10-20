@@ -1,0 +1,19 @@
+--cpu Cortex-M3
+".\objects\main.o"
+".\objects\danfoss.o"
+".\objects\initdevice.o"
+".\objects\em_assert.o"
+".\objects\em_cmu.o"
+".\objects\em_dma.o"
+".\objects\em_emu.o"
+".\objects\em_gpio.o"
+".\objects\em_leuart.o"
+".\objects\em_system.o"
+".\objects\em_timer.o"
+".\objects\em_usart.o"
+".\objects\startup_efm32tg.o"
+".\objects\system_efm32tg.o"
+--strict --scatter ".\Objects\TG210.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\TG210.map" -o .\Objects\TG210.axf
