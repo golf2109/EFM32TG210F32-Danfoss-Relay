@@ -258,7 +258,7 @@ extern void USART1_enter_DefaultMode_from_RESET(void) {
 #if defined( USART_INPUT_RXPRS ) && defined( USART_CTRL_MVDIS )
 	initasync.mvdis = 0;
 	initasync.prsRxEnable = 0;
-//	initasync.prsRxCh = 0;
+	initasync.prsRxCh = 0;
 #endif
 
 	USART_InitAsync(USART1, &initasync);
@@ -491,7 +491,6 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 			| GPIO_P_MODEH_MODE11_PUSHPULL;
 
 	/* Pin PB13 is configured to Push-pull */
-	GPIO->P[1].DOUT |= (1 << 13);
 	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE13_MASK)
 			| GPIO_P_MODEH_MODE13_PUSHPULL;
 
@@ -540,6 +539,10 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	// [Port D Configuration]$
 
 	// $[Port E Configuration]
+
+	/* Pin PE10 is configured to Push-pull */
+	GPIO->P[4].MODEH = (GPIO->P[4].MODEH & ~_GPIO_P_MODEH_MODE10_MASK)
+			| GPIO_P_MODEH_MODE10_PUSHPULL;
 
 	/* Pin PE11 is configured to Push-pull */
 	GPIO->P[4].MODEH = (GPIO->P[4].MODEH & ~_GPIO_P_MODEH_MODE11_MASK)

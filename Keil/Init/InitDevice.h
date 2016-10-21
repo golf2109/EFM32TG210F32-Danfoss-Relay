@@ -43,26 +43,29 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void);
 
 // $[User-defined pin name abstraction]
 
-#define COM1_PIN            (11)
+#define COM1_PIN            (10)
 #define COM1_PORT           (gpioPortE)
 
-#define COM2_PIN            (12)
+#define COM2_PIN            (11)
 #define COM2_PORT           (gpioPortE)
 
-#define COM3_PIN            (13)
+#define COM3_PIN            (12)
 #define COM3_PORT           (gpioPortE)
 
-#define COM4_PIN            (0)
-#define COM4_PORT           (gpioPortA)
+#define COM4_PIN            (13)
+#define COM4_PORT           (gpioPortE)
 
-#define COM5_PIN            (1)
+#define COM5_PIN            (0)
 #define COM5_PORT           (gpioPortA)
 
-#define COM6_PIN            (2)
+#define COM6_PIN            (1)
 #define COM6_PORT           (gpioPortA)
 
-#define COM7_PIN            (0)
-#define COM7_PORT           (gpioPortC)
+#define COM7_PIN            (2)
+#define COM7_PORT           (gpioPortA)
+
+#define COM8_PIN            (0)
+#define COM8_PORT           (gpioPortC)
 
 #define GPIO_SWO_PIN        (2)
 #define GPIO_SWO_PORT       (gpioPortF)

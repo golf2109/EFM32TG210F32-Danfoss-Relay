@@ -373,12 +373,12 @@ ARM Macro Assembler    Page 6
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\startup_efm32tg.d -o.\objects\startup_efm32tg.o -IH:\!ST
-M32\Work\Gross\!EFM\EFM32TG210F32_MBUS_control_PC\RTE -IC:\Keil_v520\ARM\PACK\A
-RM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v520\ARM\PACK\Keil\EFM32TGxxx_DFP\1.2.0\
-Device\EFM32TG\Include -IC:\Keil_v520\ARM\PACK\Keil\EFM32TGxxx_DFP\1.2.0\emlib\
-inc --predefine="__UVISION_VERSION SETA 520" --predefine="_RTE_ SETA 1" --prede
-fine="EFM32TG210F32 SETA 1" --list=.\listings\startup_efm32tg.lst RTE\Device\EF
-M32TG210F32\startup_efm32tg.s
+M32\Work\Gross\!EFM\EFM32TG210F32_MBUS_control_PC_Danfoss_Relay\RTE -IC:\Keil_v
+520\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v520\ARM\PACK\Keil\EFM32TG
+xxx_DFP\1.2.0\Device\EFM32TG\Include -IC:\Keil_v520\ARM\PACK\Keil\EFM32TGxxx_DF
+P\1.2.0\emlib\inc --predefine="__UVISION_VERSION SETA 520" --predefine="_RTE_ S
+ETA 1" --predefine="EFM32TG210F32 SETA 1" --list=.\listings\startup_efm32tg.lst
+ RTE\Device\EFM32TG210F32\startup_efm32tg.s
 
 
 

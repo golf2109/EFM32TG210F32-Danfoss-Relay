@@ -5,14 +5,6 @@ extern  void  send_danfoss(uint8_t data);
 	
 void  read_danfoss(void)
 {
-//receive[0]=LEUART_Rx(LEUART0);
-//receive[1]=LEUART_Rx(LEUART0);
-//receive[2]=LEUART_Rx(LEUART0);
-//receive[3]=LEUART_Rx(LEUART0);
-//receive[4]=LEUART_Rx(LEUART0);
-//receive[5]=LEUART_Rx(LEUART0);
-//receive[6]=LEUART_Rx(LEUART0);
-//receive[7]=LEUART_Rx(LEUART0);
 	counter_from_danfoss = 0;
 }
 
@@ -21,15 +13,6 @@ void  start_danfoss(void)
 //static  uint8_t set_frq_danfoss[6] = {0x01, 0x06, 0xc3, 0x4f, 0x04, 0x7c,};	
 //static  uint16_t crc_danfoss;
 //static  uint8_t  crc_1, crc_2;
-
-//LEUART_Tx(LEUART0, 0x01);		
-//LEUART_Tx(LEUART0, 0x06);
-//LEUART_Tx(LEUART0, 0xc3);
-//LEUART_Tx(LEUART0, 0x4f);
-//LEUART_Tx(LEUART0, 0x04);
-//LEUART_Tx(LEUART0, 0x7c);
-//LEUART_Tx(LEUART0, 0x87);
-//LEUART_Tx(LEUART0, 0x78);		
 	
 send_danfoss(0x01);		
 send_danfoss(0x06);
@@ -45,25 +28,15 @@ read_danfoss();
 }
 
 void  stop_danfoss(void)
-{
-//
-//LEUART_Tx(LEUART0, 0x01);		
-//LEUART_Tx(LEUART0, 0x06);
-//LEUART_Tx(LEUART0, 0xc3);
-//LEUART_Tx(LEUART0, 0x4f);
-//LEUART_Tx(LEUART0, 0x04);
-//LEUART_Tx(LEUART0, 0x2c);
-//LEUART_Tx(LEUART0, 0x87);
-//LEUART_Tx(LEUART0, 0x44);	
-	
+{	
 send_danfoss(0x01);		
 send_danfoss(0x06);
 send_danfoss(0xc3);
 send_danfoss(0x4f);
 send_danfoss(0x04);
-send_danfoss(0x7c);
+send_danfoss(0x2c);
 send_danfoss(0x87);
-send_danfoss(0x78);		
+send_danfoss(0x44);		
 
 counter_from_danfoss = 0;		
 read_danfoss();	
@@ -73,37 +46,12 @@ void  set_frq_danfoss(uint8_t frq_danfoss_h, uint8_t frq_danfoss_l)
 {
 static  uint8_t set_frq_danfoss[6] = {0x01, 0x06, 0xc3, 0x59, 0x00, 0x00,};	
 static  uint16_t crc_danfoss;
-//static  uint8_t  crc_1, crc_2;
-//static  uint16_t  frq_danfoss;
-//static  uint16_t fr_h, fr_l;
-
-//fr_h = (32*(256*frq_danfoss_h+frq_danfoss_l))>>8;
-//fr_l = (32*(256*frq_danfoss_h+frq_danfoss_l));
-
-//set_frq_danfoss[4] = frq_danfoss_h;
-//set_frq_danfoss[5] = frq_danfoss_l;
-
+start_danfoss();
+Delay(100);
 set_frq_danfoss[4] = (uint8_t)((32*(256*frq_danfoss_h+frq_danfoss_l))>>8);
 set_frq_danfoss[5] = (uint8_t)(32*(256*frq_danfoss_h+frq_danfoss_l));
 
 crc_danfoss = crc16(set_frq_danfoss, 6);	
-	
-//LEUART_Tx(LEUART0, 0x01);		
-//LEUART_Tx(LEUART0, 0x06);
-//LEUART_Tx(LEUART0, 0xc3);
-//LEUART_Tx(LEUART0, 0x59);
-////LEUART_Tx(LEUART0, 0x10);
-////LEUART_Tx(LEUART0, frq_danfoss_h);	
-//LEUART_Tx(LEUART0, set_frq_danfoss[4]);	
-////LEUART_Tx(LEUART0, 0x00);
-////LEUART_Tx(LEUART0, frq_danfoss_l);	
-//LEUART_Tx(LEUART0, set_frq_danfoss[5]);	
-////crc_1 = (uint8_t)(crc_danfoss>>8);
-////crc_2 = (uint8_t)(crc_danfoss);
-////LEUART_Tx(LEUART0, 0x68);
-//LEUART_Tx(LEUART0, (uint8_t)(crc_danfoss>>8));
-////LEUART_Tx(LEUART0, 0x5d);	
-//LEUART_Tx(LEUART0, (uint8_t)crc_danfoss);
 
 send_danfoss(0x01);		
 send_danfoss(0x06);

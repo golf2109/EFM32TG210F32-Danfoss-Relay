@@ -36,6 +36,74 @@ GPIO_PinOutSet(RE_DANFOSS_PORT, RE_DANFOSS_PIN);
 LEUART_Tx(LEUART0, data);	
 }
 
+void  set_relay(uint8_t data)
+{
+if ((data & 0x1)== 1){
+	GPIO_PinOutSet(COM1_PORT, COM1_PIN);}
+else{
+	GPIO_PinOutClear(COM1_PORT, COM1_PIN);}
+if ((data & 0x2)== 2){
+	GPIO_PinOutSet(COM2_PORT, COM2_PIN);}
+else{
+	GPIO_PinOutClear(COM2_PORT, COM2_PIN);}
+if ((data & 0x4)== 4){
+	GPIO_PinOutSet(COM3_PORT, COM3_PIN);}
+else{
+	GPIO_PinOutClear(COM3_PORT, COM3_PIN);}
+if ((data & 0x8)== 8){
+	GPIO_PinOutSet(COM4_PORT, COM4_PIN);}
+else{
+	GPIO_PinOutClear(COM4_PORT, COM4_PIN);}
+if ((data & 0x10)== 0x10){
+	GPIO_PinOutSet(COM5_PORT, COM5_PIN);}
+else{
+	GPIO_PinOutClear(COM5_PORT, COM5_PIN);}
+if ((data & 0x20)== 0x20){
+	GPIO_PinOutSet(COM6_PORT, COM6_PIN);}
+else{
+	GPIO_PinOutClear(COM6_PORT, COM6_PIN);}
+if ((data & 0x40)== 0x40){
+	GPIO_PinOutSet(COM7_PORT, COM7_PIN);}
+else{
+	GPIO_PinOutClear(COM7_PORT, COM7_PIN);}
+}
+
+void set_param (uint8_t * data)
+{
+	param_nunber = *data;
+	param_value = *(data+1) + 0x100*(*(data+2)) + 0x10000*(*(data+3)) +0x1000000*(*(data+4));
+	switch(param_nunber)
+	{
+		case 0x20:
+			cmd_receive = 0;
+		  start_danfoss();
+			send_char(0xE5);		
+		  break;
+		case 0x21:
+			cmd_receive = 0;			
+		  stop_danfoss();
+			send_char(0xE5);		
+		  break;		
+    case 0x22:			
+			cmd_receive = 0;			
+			set_frq_danfoss(*(data+2),*(data+1));
+			send_char(0xE5);		
+			break;		
+    case 0x23:			
+			cmd_receive = 0;			
+			test_danfoss();
+			send_char(0xE5);		
+			break;
+    case 0x30:			
+			cmd_receive = 0;			
+			set_relay(*(data+1));
+			send_char(0xE5);		
+			break;		
+		default:
+			break;
+	}
+}
+
 int	main(void)
 {
 CHIP_Init();
@@ -51,10 +119,11 @@ enter_DefaultMode_from_RESET();
   if (SysTick_Config(SystemCoreClock / 1000)) { /* SysTick 1 msec interrupts  */
     while (1) __NOP();                          /* Capture error              */
 	}
-	
+
+set_relay(state_relay);	
 
 GPIO_PinOutClear(RE_TR_PORT, RE_TR_PIN);	
-GPIO_PinOutClear(RE_DANFOSS_PORT, RE_DANFOSS_PIN);		
+GPIO_PinOutSet(RE_DANFOSS_PORT, RE_DANFOSS_PIN);		
 //GPIO_PinOutSet(RE_TR_PORT, RE_TR_PIN);
 USART_IntClear(USART1, _USART_IF_MASK);
 USART_IntEnable(USART1, USART_IF_RXDATAV);
@@ -80,52 +149,54 @@ while(1)
 {
 //	while(1)
 //	{
-//				send_danfoss(0x35);	
-//		Delay(100);
-//						send_danfoss(0x20);	
-//		Delay(100);
+//		for(uint8_t  i=0; i <= 0xFF;i++)
+//		{
+//		set_relay(i);		
+//		Delay(1);
+//		}
 //	}
 	switch(cmd_receive)
 	{
 		case 0:
 			break;
 		case 1:
-			cmd_receive = 0;				
-//			USART_Tx(USART1, 0xE5);		
+			cmd_receive = 0;					
 			send_char(0xE5);		
 			break;
 		case 2:
-			cmd_receive = 0;				
-//			USART_Tx(USART1, 0xE5);			
+			cmd_receive = 0;						
 			send_char(0xE5);		
 			break;
 		case 3:
-			cmd_receive = 0;				
-//			USART_Tx(USART1, 0xE5);			
+			cmd_receive = 0;	
+			if(param_len > 0)
+			{
+				number_of_set = param_len/5;
+				for (int i = 0; i <= number_of_set; i++)
+				{
+					set_param(&data_receive[5*i]);
+				}
+			}
 			send_char(0xE5);		
 			break;		
 		case 0x20:
 			cmd_receive = 0;
 		  start_danfoss();
-//			USART_Tx(USART1, 0xE5);		
 			send_char(0xE5);		
 		  break;
 		case 0x21:
 			cmd_receive = 0;			
 		  stop_danfoss();
-//			USART_Tx(USART1, 0xE5);		
 			send_char(0xE5);		
 		  break;		
     case 0x22:			
 			cmd_receive = 0;			
 			set_frq_danfoss(data_receive[0], data_receive[1]);
-//			USART_Tx(USART1, 0xE5);		
 			send_char(0xE5);		
 			break;		
     case 0x23:			
 			cmd_receive = 0;			
 			test_danfoss();
-//			USART_Tx(USART1, 0xE5);		
 			send_char(0xE5);		
 			break;			
 		
@@ -141,42 +212,7 @@ while(1)
 //LEUART_Tx(LEUART0, 0xAA);	
 
 /*	
-if (USART_Rx(USART1) ==0x01)
-{
-in_rel[2]=	USART_Rx(USART1);
-in_rel[1]=	USART_Rx(USART1);
-in_rel[0]=	USART_Rx(USART1);	
-in_byte = 100*(0xF & in_rel[2]) + 10*(0xF & in_rel[1])+ (0xF &in_rel[0]);
-	
-if ((in_byte & 0x1)== 1){
-	GPIO_PinOutSet(COM1_PORT, COM1_PIN);}
-else{
-	GPIO_PinOutClear(COM1_PORT, COM1_PIN);}
-if ((in_byte & 0x2)== 2){
-	GPIO_PinOutSet(COM2_PORT, COM2_PIN);}
-else{
-	GPIO_PinOutClear(COM2_PORT, COM2_PIN);}
-if ((in_byte & 0x4)== 4){
-	GPIO_PinOutSet(COM3_PORT, COM3_PIN);}
-else{
-	GPIO_PinOutClear(COM3_PORT, COM3_PIN);}
-if ((in_byte & 0x8)== 8){
-	GPIO_PinOutSet(COM4_PORT, COM4_PIN);}
-else{
-	GPIO_PinOutClear(COM4_PORT, COM4_PIN);}
-if ((in_byte & 0x10)== 0x10){
-	GPIO_PinOutSet(COM5_PORT, COM5_PIN);}
-else{
-	GPIO_PinOutClear(COM5_PORT, COM5_PIN);}
-if ((in_byte & 0x20)== 0x20){
-	GPIO_PinOutSet(COM6_PORT, COM6_PIN);}
-else{
-	GPIO_PinOutClear(COM6_PORT, COM6_PIN);}
-if ((in_byte & 0x40)== 0x40){
-	GPIO_PinOutSet(COM7_PORT, COM7_PIN);}
-else{
-	GPIO_PinOutClear(COM7_PORT, COM7_PIN);}
-}
+
 
 USART1->TXDATA = 0x55;
 if (USART_Rx(USART1) ==0x02)
@@ -233,6 +269,7 @@ if(uart1_RX[0] == 0x68  && uart1_RX[1] == 1)
 	  len_l_receive = uart1_RX[3];
 		len_h_receive = uart1_RX[4];				
 		data_len = 256*len_h_receive + len_l_receive;
+		param_len = data_len;
 		}
 	if(data_len  > 0)
 		{
